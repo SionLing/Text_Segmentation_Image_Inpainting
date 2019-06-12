@@ -15,10 +15,11 @@ from models.text_segmentation import TextSegament, XceptionTextSegment
 
 
 def draw_bounding_box(img, mask, area_threshold=100):
+    ret,mask=cv2.threshold(mask, 126, 255, 0)
     b, c = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     for cnt in b:
         area = cv2.contourArea(cnt)
-        if area > area_threshold:
+        if area > area_threshold and area < ((len(img)-1)*(len(img[0])-1)):
             hull = cv2.convexHull(cnt)
             cv2.drawContours(img, [hull], 0, (50, 128, 30), -1)
 
